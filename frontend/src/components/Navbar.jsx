@@ -1,20 +1,23 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays, Bell, ScanLine } from 'lucide-react';
+import { Menu, X, Sprout, FlaskConical, Wheat, BarChart3, Landmark, Home as HomeIcon, HeartHandshake, Trees, Store, Droplet, Globe, ChevronDown, User, Settings, LogOut, Moon, Sun, Award, ChevronRight, CalendarDays, Bell, ScanLine, MoreHorizontal } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import toast from 'react-hot-toast';
 
-const navLinks = [
+const mainNavLinks = [
   { path: '/', label: 'Home', Icon: HomeIcon },
   { path: '/soil-input', label: 'Soil', Icon: FlaskConical },
   { path: '/crops', label: 'Crops', Icon: Wheat },
   { path: '/disease', label: 'Disease', Icon: ScanLine },
-  { path: '/weather', label: 'Weather', Icon: Sun },
   { path: '/market', label: 'Market', Icon: BarChart3 },
-  { path: '/bio-inputs', label: 'Bio-Fertilizer', Icon: Droplet },
-  { path: '/agroforestry', label: 'Profit Trees', Icon: Trees },
   { path: '/schemes', label: 'Schemes', Icon: Landmark }
+];
+
+const moreNavLinks = [
+  { path: '/agroforestry', label: 'Profit Trees', Icon: Trees },
+  { path: '/bio-inputs', label: 'Bio-Fertilizer', Icon: Droplet },
+  { path: '/weather', label: 'Weather', Icon: Sun }
 ];
 
 const languages = [
@@ -109,7 +112,6 @@ const navItemStyles = `
 
 function UserProfile() {
   const [isOpen, setIsOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const menuRef = useRef(null);
   const navigate = useNavigate();
@@ -208,24 +210,7 @@ function UserProfile() {
                     <ChevronRight className="w-4 h-4 opacity-40" />
                   </button>
 
-                  <div
-                    onClick={toggleTheme}
-                    className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300 transition-colors cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded-lg group-hover:bg-primary-100 dark:group-hover:bg-primary-900/30 transition-colors">
-                        {theme === 'dark' ? (
-                          <Sun className="w-4 h-4 text-yellow-500" />
-                        ) : (
-                          <Moon className="w-4 h-4 text-gray-500" />
-                        )}
-                      </div>
-                      <span className="text-sm font-bold">{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
-                    </div>
-                    <div className={`w-10 h-5 rounded-full relative p-1 transition-colors duration-300 ${theme === 'dark' ? 'bg-primary-600' : 'bg-gray-200'}`}>
-                      <div className={`w-3 h-3 bg-white rounded-full shadow-sm transition-transform duration-300 ${theme === 'dark' ? 'translate-x-5' : 'translate-x-0'}`} />
-                    </div>
-                  </div>
+
 
                   <button
                     onClick={handleLogout}
@@ -243,6 +228,24 @@ function UserProfile() {
         </>
       )}
     </div>
+  );
+}
+
+/* ── Theme Toggle ── */
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <button
+      onClick={toggleTheme}
+      className="relative p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-primary-50 dark:hover:bg-primary-900/50 text-gray-600 dark:text-gray-300 hover:text-primary-600 transition-all active:scale-95 group border border-transparent hover:border-primary-100 dark:hover:border-primary-900/30"
+      title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+    >
+      {theme === 'dark' ? (
+        <Sun className="w-5 h-5 text-yellow-500 group-hover:rotate-12 transition-transform" />
+      ) : (
+        <Moon className="w-5 h-5 group-hover:-rotate-12 transition-transform" />
+      )}
+    </button>
   );
 }
 
@@ -507,6 +510,59 @@ function NotificationBell() {
   );
 }
 
+function MoreDropdown({ isActive, currentPath }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div 
+      className="relative" 
+      onMouseEnter={() => setIsOpen(true)} 
+      onMouseLeave={() => setIsOpen(false)}
+    >
+      <div
+        className={`nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-semibold whitespace-nowrap select-none cursor-pointer
+          ${isActive
+            ? 'text-primary-700 bg-primary-50 shadow-sm'
+            : 'text-gray-500 hover:text-primary-700 hover:bg-primary-50/60'
+          }`}
+      >
+        <Menu
+          className={`nav-icon w-4 h-4 shrink-0 ${isActive ? 'text-primary-600' : 'text-gray-400'}`}
+          strokeWidth={isActive ? 2.5 : 2}
+        />
+        <span>More</span>
+        <ChevronDown className="w-3 h-3 opacity-50" />
+        {isActive && <span className="nav-link-active-bar" />}
+      </div>
+      
+      {isOpen && (
+        <div className="absolute top-full right-0 pt-2 w-48 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 dark:border-gray-800 overflow-hidden p-1.5">
+            {moreNavLinks.map(({ path, label, Icon }) => {
+              const active = currentPath === path;
+              return (
+                <Link
+                  key={path}
+                  to={path}
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all mb-0.5
+                    ${active 
+                      ? 'text-primary-700 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20' 
+                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                >
+                  <Icon className={`w-4 h-4 ${active ? 'text-primary-600' : 'text-gray-400'}`} />
+                  {label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -537,7 +593,7 @@ export default function Navbar() {
 
             {/* ── Desktop Nav ── */}
             <div className="hidden lg:flex items-center gap-1 mx-4">
-              {navLinks.map(({ path, label, Icon }) => (
+              {mainNavLinks.map(({ path, label, Icon }) => (
                 <NavItem
                   key={path}
                   path={path}
@@ -546,10 +602,16 @@ export default function Navbar() {
                   isActive={location.pathname === path}
                 />
               ))}
+              
+              <MoreDropdown 
+                isActive={moreNavLinks.some(link => link.path === location.pathname)} 
+                currentPath={location.pathname} 
+              />
             </div>
 
             {/* ── Right side ── */}
             <div className="flex items-center gap-2.5 shrink-0">
+              <ThemeToggle />
               <LanguageSelector />
               <NotificationBell />
               <UserProfile />
@@ -569,7 +631,7 @@ export default function Navbar() {
         {isOpen && (
           <div className="lg:hidden bg-white border-t border-gray-100 animate-fade-in shadow-lg">
             <div className="px-4 py-3 space-y-1">
-              {navLinks.map(({ path, label, Icon }) => {
+              {[...mainNavLinks, ...moreNavLinks].map(({ path, label, Icon }) => {
                 const active = location.pathname === path;
                 return (
                   <Link
