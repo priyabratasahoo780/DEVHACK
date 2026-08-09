@@ -1,0 +1,6 @@
+# This directory stores uploaded soil reports
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.webp
