@@ -5,3 +5,6 @@ pandas
 scikit-learn
 requests
 pydantic
+google-generativeai
+python-multipart
+pillow

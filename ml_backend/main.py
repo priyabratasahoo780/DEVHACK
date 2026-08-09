@@ -1,7 +1,7 @@
 """
 Main entrypoint for Smart Mandi Price Prediction API.
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
@@ -9,6 +9,19 @@ from sklearn.linear_model import LinearRegression
 import requests
 from datetime import datetime
 import json
+import os
+from dotenv import load_dotenv
+import google.generativeai as genai
+from PIL import Image
+import io
+
+load_dotenv(dotenv_path="../.env")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+with open("disease_db.json", "r", encoding="utf-8") as f:
+    DISEASE_DB = json.load(f)
+    DISEASE_KEYS = list(DISEASE_DB.keys())
+
 
 app = FastAPI(title="Smart Mandi Price Prediction API")
 
@@ -147,6 +160,52 @@ def predict_price(crop: str = "Wheat", lat: float = None, lon: float = None):
         "message": msg,
         "source": "Live Agmarknet Data Gov API"
     }
+
+@app.post("/predict-disease")
+async def predict_disease(image: UploadFile = File(...)):
+    try:
+        contents = await image.read()
+        pil_img = Image.open(io.BytesIO(contents))
+        
+        prompt = f"""You are an agricultural expert. Identify the crop disease in this image.
+You MUST map the image to EXACTLY ONE of these specific disease keys.
+If it is a healthy plant, output "healthy".
+If you are unsure or it is not in the list, output "UNKNOWN".
+
+Here are the valid keys:
+{DISEASE_KEYS}
+
+Output ONLY the exact key string. No explanation, no quotes."""
+
+        model = genai.GenerativeModel("gemini-2.5-flash")
+        response = model.generate_content([prompt, pil_img])
+        predicted_key = response.text.strip()
+        
+        if predicted_key in DISEASE_DB:
+            disease_data = DISEASE_DB[predicted_key]
+            
+            return {
+                "disease": disease_data.get("display_name", predicted_key),
+                "confidence": "95%",
+                "severity": disease_data.get("severity", "Medium"),
+                "action": "Immediate treatment required" if disease_data.get("severity") == "High" else "Monitor closely",
+                "description": f"Cause: {disease_data.get('cause', 'Unknown')}\\nSymptoms: {disease_data.get('symptoms', '')}\\nPrevention: {disease_data.get('prevention', '')}",
+                "treatments": disease_data.get("chemical_treatments", ["Consult local expert"]),
+                "organic": disease_data.get("organic_treatments", ["Consult local expert"])
+            }
+        else:
+            return {
+                "disease": "Unknown / Not in DB",
+                "confidence": "0%",
+                "severity": "N/A",
+                "action": "Please consult an expert",
+                "description": f"The AI predicted '{predicted_key}' which is not in our verified database. Please check manually.",
+                "treatments": ["Check for pests manually", "Ensure proper watering"],
+                "organic": ["Spray neem oil if pests are visible"]
+            }
+    except Exception as e:
+        print("Disease detection error:", str(e))
+        raise HTTPException(status_code=500, detail="Failed to process image")
 
 if __name__ == "__main__":
     import uvicorn

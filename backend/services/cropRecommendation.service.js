@@ -59,9 +59,9 @@ OUTPUT FORMAT: Return ONLY valid JSON inside a code block, exactly like this:
 
   try {
     logger.ai('Calling Gemini for crop recommendation...');
-    // Add a 10s timeout to prevent hanging if the API key is bad or network is slow
+    // Add a 30s timeout to prevent hanging if the API key is bad or network is slow
     const generatePromise = model.generateContent(prompt);
-    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini API timeout')), 10000));
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Gemini API timeout')), 30000));
     const response = await Promise.race([generatePromise, timeoutPromise]);
     
     // Parse the JSON blocks out of the markdown response
