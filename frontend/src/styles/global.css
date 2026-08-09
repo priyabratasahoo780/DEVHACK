@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Outfit', system-ui, sans-serif;
+    background-color: #f8faf8;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: #2e7d32;
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #e8f5e9;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #66bb6a;
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2e7d32;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-lg border border-primary-100/50 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+  }
+
+  .btn-primary {
+    @apply bg-primary-800 text-white px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:bg-primary-900 hover:shadow-lg hover:shadow-primary-800/25 active:scale-95 flex items-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-primary-50 text-primary-800 px-6 py-3 rounded-xl font-semibold text-sm border-2 border-primary-200 transition-all duration-300 hover:bg-primary-100 hover:border-primary-300 active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-white text-gray-800 font-medium outline-none transition-all duration-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 placeholder:text-gray-400;
+  }
+
+  .label-text {
+    @apply text-sm font-semibold text-gray-700 mb-1.5 block;
+  }
+
+  .section-title {
+    @apply text-2xl md:text-3xl font-bold text-gray-900;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-br from-primary-800 via-primary-700 to-primary-900;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md rounded-2xl border border-white/50 shadow-xl;
+  }
+}
+
+/* Hide default Google Translate UI */
+#google_translate_element {
+  display: none !important;
+}
+.goog-te-banner-frame {
+  display: none !important;
+}
+.skiptranslate.goog-te-gadget {
+  display: none !important;
+}
+.goog-tooltip {
+  display: none !important;
+}
+.goog-tooltip:hover {
+  display: none !important;
+}
+.goog-text-highlight {
+  background-color: transparent !important;
+  border: none !important; 
+  box-shadow: none !important;
+}
+#goog-gt-tt {
+  display: none !important;
+  visibility: hidden !important;
+}
+.goog-te-spinner-pos {
+  display: none !important;
+}
+body {
+  top: 0px !important;
+  position: static !important;
+}
+iframe.goog-te-banner-frame {
+  display: none !important;
+}
+iframe[name="goog_te_banner"] {
+  display: none !important;
+}
+
+/* SpeakButton sound wave animation */
+@keyframes soundWave {
+  0% { transform: scaleY(0.3); }
+  100% { transform: scaleY(1); }
+}
+
+/* No scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
