@@ -1,0 +1,17 @@
+{
+  "name": "smart-farming-ai",
+  "version": "1.0.0",
+  "description": "AI-powered Smart Farming Assistant — Soil analysis, Crop advisory, Weather & Market insights",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": ["farming", "ai", "agriculture", "gemini", "smart-farming"],
+  "author": "Abdul Haque",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
