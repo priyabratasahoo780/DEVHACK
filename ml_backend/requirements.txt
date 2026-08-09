@@ -8,3 +8,6 @@ pydantic
 google-generativeai
 python-multipart
 pillow
+python-dotenv
+torch
+torchvision

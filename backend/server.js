@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { logger } from './utils/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -57,6 +58,12 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/transparency', transparencyRoutes);
 app.use('/api/tts', ttsRoutes);
 app.use('/api/ocr', ocrRoutes);
+
+// Proxy for Python ML Backend
+app.use('/api/ml', createProxyMiddleware({ 
+  target: process.env.ML_BACKEND_URL || 'http://127.0.0.1:8000', 
+  changeOrigin: true 
+}));
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' });

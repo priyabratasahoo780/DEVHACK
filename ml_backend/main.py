@@ -15,6 +15,33 @@ import google.generativeai as genai
 from PIL import Image
 import io
 
+try:
+    import torch
+    from torchvision import transforms
+    import torch.nn.functional as F
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+
+# Load local model
+local_model = None
+local_class_indices = None
+device = None
+
+if TORCH_AVAILABLE:
+    MODEL_PATH = "disease_model.pt"
+    CLASS_INDICES_PATH = "class_indices.json"
+    if os.path.exists(MODEL_PATH) and os.path.exists(CLASS_INDICES_PATH):
+        try:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            local_model = torch.load(MODEL_PATH, map_location=device)
+            local_model.eval()
+            with open(CLASS_INDICES_PATH, "r") as f:
+                local_class_indices = json.load(f)
+            print(f"Local PyTorch disease model loaded successfully on {device}!")
+        except Exception as e:
+            print(f"Could not load local model: {e}")
+
 load_dotenv(dotenv_path="../.env")
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
@@ -167,7 +194,43 @@ async def predict_disease(image: UploadFile = File(...)):
         contents = await image.read()
         pil_img = Image.open(io.BytesIO(contents))
         
-        prompt = f"""You are an agricultural expert. Identify the crop disease in this image.
+        predicted_key = None
+        prediction_source = "Gemini API"
+        local_confidence = 0.0
+        
+        # Try local model first
+        if local_model is not None and local_class_indices is not None:
+            try:
+                # Preprocess image for PyTorch model
+                img = pil_img.convert('RGB')
+                
+                preprocess = transforms.Compose([
+                    transforms.Resize((224, 224)),
+                    transforms.ToTensor(),
+                    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                ])
+                
+                input_tensor = preprocess(img)
+                input_batch = input_tensor.unsqueeze(0).to(device)
+                
+                with torch.no_grad():
+                    output = local_model(input_batch)
+                    probabilities = F.softmax(output[0], dim=0)
+                    
+                local_confidence, predicted_idx = torch.max(probabilities, 0)
+                local_confidence = local_confidence.item()
+                predicted_idx = predicted_idx.item()
+                
+                # Use local model if confidence is > 65%
+                if local_confidence > 0.65:
+                    predicted_key = local_class_indices.get(str(predicted_idx))
+                    prediction_source = "Local ML Model"
+            except Exception as e:
+                print(f"Local model inference error: {e}")
+        
+        # Fallback to Gemini API if local model isn't available or confident
+        if predicted_key is None:
+            prompt = f"""You are an agricultural expert. Identify the crop disease in this image.
 You MUST map the image to EXACTLY ONE of these specific disease keys.
 If it is a healthy plant, output "healthy".
 If you are unsure or it is not in the list, output "UNKNOWN".
@@ -177,16 +240,18 @@ Here are the valid keys:
 
 Output ONLY the exact key string. No explanation, no quotes."""
 
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        response = model.generate_content([prompt, pil_img])
-        predicted_key = response.text.strip()
+            model = genai.GenerativeModel("gemini-2.5-flash")
+            response = model.generate_content([prompt, pil_img])
+            predicted_key = response.text.strip()
+            prediction_source = "Gemini API"
         
         if predicted_key in DISEASE_DB:
             disease_data = DISEASE_DB[predicted_key]
             
             return {
                 "disease": disease_data.get("display_name", predicted_key),
-                "confidence": "95%",
+                "confidence": f"{int(local_confidence * 100)}%" if prediction_source == "Local ML Model" else "95%",
+                "source": prediction_source,
                 "severity": disease_data.get("severity", "Medium"),
                 "action": "Immediate treatment required" if disease_data.get("severity") == "High" else "Monitor closely",
                 "description": f"Cause: {disease_data.get('cause', 'Unknown')}\\nSymptoms: {disease_data.get('symptoms', '')}\\nPrevention: {disease_data.get('prevention', '')}",
@@ -194,15 +259,29 @@ Output ONLY the exact key string. No explanation, no quotes."""
                 "organic": disease_data.get("organic_treatments", ["Consult local expert"])
             }
         else:
-            return {
-                "disease": "Unknown / Not in DB",
-                "confidence": "0%",
-                "severity": "N/A",
-                "action": "Please consult an expert",
-                "description": f"The AI predicted '{predicted_key}' which is not in our verified database. Please check manually.",
-                "treatments": ["Check for pests manually", "Ensure proper watering"],
-                "organic": ["Spray neem oil if pests are visible"]
-            }
+            if prediction_source == "Local ML Model":
+                # Local model found a class but it's not in disease_db.json
+                return {
+                    "disease": predicted_key.replace('_', ' ').title(),
+                    "confidence": f"{int(local_confidence * 100)}%",
+                    "source": prediction_source,
+                    "severity": "Unknown",
+                    "action": "Consult local agricultural expert",
+                    "description": f"Detected {predicted_key} by local model, but detailed treatment info is missing.",
+                    "treatments": ["Consult local expert for specific chemical treatments"],
+                    "organic": ["Maintain good field hygiene"]
+                }
+            else:
+                return {
+                    "disease": "Unknown / Not in DB",
+                    "confidence": "0%",
+                    "source": prediction_source,
+                    "severity": "N/A",
+                    "action": "Please consult an expert",
+                    "description": f"The AI predicted '{predicted_key}' which is not in our verified database. Please check manually.",
+                    "treatments": ["Check for pests manually", "Ensure proper watering"],
+                    "organic": ["Spray neem oil if pests are visible"]
+                }
     except Exception as e:
         print("Disease detection error:", str(e))
         raise HTTPException(status_code=500, detail="Failed to process image")

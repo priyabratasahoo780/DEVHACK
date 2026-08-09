@@ -611,8 +611,10 @@ export default function Navbar() {
 
             {/* ── Right side ── */}
             <div className="flex items-center gap-2.5 shrink-0">
-              <ThemeToggle />
-              <LanguageSelector />
+              <div className="hidden md:flex items-center gap-2.5">
+                <ThemeToggle />
+                <LanguageSelector />
+              </div>
               <NotificationBell />
               <UserProfile />
               <div id="google_translate_element" className="hidden" />
@@ -629,9 +631,16 @@ export default function Navbar() {
 
         {/* ── Mobile Nav ── */}
         {isOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-100 animate-fade-in shadow-lg">
+          <div className="lg:hidden bg-white dark:bg-neu-darkBg border-t border-gray-100 dark:border-gray-800 animate-fade-in shadow-lg">
+            <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between md:hidden">
+              <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">Preferences</span>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <LanguageSelector />
+              </div>
+            </div>
             <div className="px-4 py-3 space-y-1">
-              {[...mainNavLinks, ...moreNavLinks].map(({ path, label, Icon }) => {
+              {mainNavLinks.map(({ path, label, Icon }) => {
                 const active = location.pathname === path;
                 return (
                   <Link
@@ -646,6 +655,31 @@ export default function Navbar() {
                   >
                     <div className={`p-1.5 rounded-lg ${active ? 'bg-white/20' : 'bg-primary-50'}`}>
                       <Icon className={`w-4 h-4 ${active ? 'text-white' : 'text-primary-600'}`} />
+                    </div>
+                    {label}
+                  </Link>
+                );
+              })}
+              
+              <div className="py-2">
+                <div className="px-4 py-1 text-xs font-black text-gray-400 uppercase tracking-wider">More Tools</div>
+              </div>
+              
+              {moreNavLinks.map(({ path, label, Icon }) => {
+                const active = location.pathname === path;
+                return (
+                  <Link
+                    key={path}
+                    to={path}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all active:scale-[0.98]
+                      ${active
+                        ? 'bg-primary-600 text-white shadow-md shadow-primary-600/30'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      }`}
+                  >
+                    <div className={`p-1.5 rounded-lg ${active ? 'bg-white/20' : 'bg-primary-50 dark:bg-primary-900/20'}`}>
+                      <Icon className={`w-4 h-4 ${active ? 'text-white' : 'text-primary-600 dark:text-primary-400'}`} />
                     </div>
                     {label}
                   </Link>
