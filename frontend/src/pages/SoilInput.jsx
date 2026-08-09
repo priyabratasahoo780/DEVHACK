@@ -141,11 +141,13 @@ export default function SoilInput() {
     };
     localStorage.setItem('agrisaar_soil', JSON.stringify(numericData));
 
-    const soilResult = await analyze(numericData);
-    if (soilResult) {
-      const cropResult = await getCrops(numericData);
-      const fertResult = await getFertilizer({ ...numericData, crop: numericData.crop });
+    const [soilResult, cropResult, fertResult] = await Promise.all([
+      analyze(numericData),
+      getCrops(numericData),
+      getFertilizer({ ...numericData, crop: numericData.crop })
+    ]);
 
+    if (soilResult) {
       const combinedAnalysis = {
         soil: soilResult,
         crops: cropResult,
