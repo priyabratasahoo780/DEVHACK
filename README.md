@@ -16,6 +16,29 @@ This project is built using a modern, scalable architecture divided into three m
 2. **`backend/`**: A **Node.js/Express** API gateway that handles authentication, core business logic, and acts as a proxy for the ML services.
 3. **`ml_backend/`**: A **Python/FastAPI** service powered by **PyTorch** for local machine learning tasks (like crop disease detection and market price prediction) and **Google Gemini** for LLM-based agricultural reasoning.
 
+### 🔄 System Workflow
+
+```mermaid
+graph TD
+    User([👨‍🌾 Farmer / User]) -->|Uploads Soil Report / Inputs Data| FE[Frontend<br>React + Vite]
+    
+    FE -->|API Requests| BE[API Gateway<br>Node.js + Express]
+    
+    BE -->|Core Logic & Gemini AI Calls| AI[Google Gemini<br>Generative AI]
+    BE -->|Proxies ML Specific Requests| ML[ML Backend<br>Python + FastAPI]
+    
+    ML -->|PyTorch Vision Models| Disease[Disease Detection]
+    ML -->|Scikit-Learn Models| Market[Market Price Prediction]
+    
+    AI -.->|Analyzes Soil & Weather| BE
+    Disease -.->|Detected Disease & Treatment| ML
+    Market -.->|Price Trend Predictions| ML
+    
+    ML -.->|ML Results| BE
+    BE -.->|Unified JSON Response| FE
+    FE -.->|Displays Farming Action Plan| User
+```
+
 ---
 
 ## 🎯 Problem  
