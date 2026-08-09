@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#166534" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="description" content="Smart Farming AI - AI-powered agriculture assistant for soil analysis, crop recommendations, and farming insights" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <title>Smart Farming AI 🌾 | Kisaan ka Saathi</title>
+    <style>
+      /* Aggressive Google Translate UI Hiding */
+      .skiptranslate > iframe.skiptranslate,
+      .skiptranslate iframe.goog-te-banner-frame,
+      .goog-te-balloon-frame,
+      div.skiptranslate > div,
+      .goog-tooltip,
+      .goog-tooltip:hover,
+      #goog-gt-tt,
+      .goog-te-spinner-pos,
+      .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+      .VIpgJd-ZVi9od-ORHb-OEVmcd,
+      .VIpgJd-ZVi9od-SmPBze,
+      #google_translate_element {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+        pointer-events: none !important;
+      }
+      
+      body {
+        top: 0px !important;
+        position: static !important;
+      }
+      
+      .goog-text-highlight {
+        background-color: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript">
+      // Restore user's saved language preference (or default to English)
+      (function() {
+        var savedLang = localStorage.getItem('agrisaar_language') || 'en';
+        var pathValue = savedLang === 'en' ? '/en/en' : '/en/' + savedLang;
+        document.cookie = "googtrans=" + pathValue + "; path=/";
+        document.cookie = "googtrans=" + pathValue + "; path=/; domain=" + window.location.hostname;
+        // Also set on parent domain for Vercel subdomains
+        var parts = window.location.hostname.split('.');
+        if (parts.length > 2) {
+          var parentDomain = parts.slice(-2).join('.');
+          document.cookie = "googtrans=" + pathValue + "; path=/; domain=." + parentDomain;
+        }
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement(
+          {
+            pageLanguage: 'en',
+            includedLanguages: 'en,hi,bn,te,mr,ta,gu,kn,ml,pa', // Major Indian languages + English
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+          },
+          'google_translate_element'
+        );
+      }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+  </body>
+</html>
