@@ -109,7 +109,7 @@ const farmingStyles = [
 const seasons = [
   { name: 'Rabi', months: 'Oct – Mar', icon: '❄️', img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80', color: 'from-blue-500 to-sky-600', crops: ['Wheat', 'Mustard', 'Gram', 'Potato', 'Onion'], tip: 'Sow early during the start of the season' },
   { name: 'Kharif', months: 'Jun – Oct', icon: '☀️', img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80', color: 'from-amber-500 to-orange-500', crops: ['Rice', 'Maize', 'Cotton', 'Soybean', 'Groundnut'], tip: 'Start sowing with the monsoon rains' },
-  { name: 'Zaid', months: 'Mar – Jun', icon: '🌸', img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=600&q=80', color: 'from-pink-500 to-rose-500', crops: ['Tomato', 'Cucumber', 'Watermelon', 'Muskmelon'], tip: 'Short cycle, high return' },
+  { name: 'Zaid', months: 'Mar – Jun', icon: '🌸', img: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&q=80', color: 'from-pink-500 to-rose-500', crops: ['Tomato', 'Cucumber', 'Watermelon', 'Muskmelon'], tip: 'Short cycle, high return' },
 ];
 
 const smartTips = [
