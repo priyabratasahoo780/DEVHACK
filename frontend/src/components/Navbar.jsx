@@ -170,9 +170,9 @@ function UserProfile() {
           {isOpen && (
             <>
               <div className="fixed inset-0 z-40 bg-black/5 dark:bg-black/20" onClick={() => setIsOpen(false)} />
-              <div className="absolute right-0 mt-3 w-72 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="absolute right-0 mt-3 w-72 bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] shadow-neu-flat dark:shadow-neu-dark-flat border-none overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
                 {/* Header / Identity */}
-                <div className="p-5 bg-gradient-to-br from-primary-50 to-emerald-50/30 dark:from-primary-900/10 dark:to-emerald-900/5 border-b border-gray-100 dark:border-gray-800">
+                <div className="p-5 bg-neu-bg dark:bg-neu-darkBg border-none shadow-neu-pressed dark:shadow-neu-dark-pressed m-2 rounded-2xl">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-12 h-12 rounded-2xl bg-white dark:bg-gray-800 flex items-center justify-center text-primary-600 dark:text-primary-400 font-black text-lg shadow-sm border border-primary-100 dark:border-primary-900/30">
                       {mockUser.avatar}
@@ -297,8 +297,8 @@ function LanguageSelector() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-3 w-56 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] border border-gray-100 dark:border-gray-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="p-3 border-b border-gray-100 dark:border-gray-800 bg-blue-50/50 dark:bg-blue-900/10">
+          <div className="absolute right-0 mt-3 w-56 bg-neu-bg dark:bg-neu-darkBg rounded-2xl shadow-neu-flat dark:shadow-neu-dark-flat border-none overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="p-3 border-none shadow-neu-pressed dark:shadow-neu-dark-pressed m-2 rounded-xl bg-neu-bg dark:bg-neu-darkBg">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 <span className="text-[11px] font-black text-gray-500 dark:text-gray-400 uppercase tracking-widest">Select Language</span>
@@ -473,8 +473,8 @@ function NotificationBell() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40 bg-black/5" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-3 w-[360px] bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_60px_rgba(0,0,0,0.12)] border border-gray-100 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="p-4 border-b border-gray-50 flex items-center justify-between bg-gradient-to-r from-primary-50/50 to-white">
+          <div className="absolute right-0 mt-3 w-[360px] bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] shadow-neu-flat dark:shadow-neu-dark-flat border-none overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+            <div className="p-4 border-none shadow-neu-pressed dark:shadow-neu-dark-pressed m-2 rounded-xl flex items-center justify-between bg-neu-bg dark:bg-neu-darkBg">
               <div className="flex items-center gap-2">
                 <Bell className="w-4 h-4 text-primary-600" />
                 <h3 className="font-black text-gray-900">Notifications</h3>
@@ -537,7 +537,7 @@ function MoreDropdown({ isActive, currentPath }) {
       
       {isOpen && (
         <div className="absolute top-full right-0 pt-2 w-48 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-          <div className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.1)] border border-gray-100 dark:border-gray-800 overflow-hidden p-1.5">
+          <div className="bg-neu-bg dark:bg-neu-darkBg rounded-xl shadow-neu-flat dark:shadow-neu-dark-flat border-none overflow-hidden p-1.5">
             {moreNavLinks.map(({ path, label, Icon }) => {
               const active = currentPath === path;
               return (
@@ -572,7 +572,7 @@ export default function Navbar() {
       {/* Inject custom styles once */}
       <style>{navItemStyles}</style>
 
-      <nav className="sticky top-0 w-full z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200/80 dark:border-gray-800 shadow-[0_1px_12px_rgba(0,0,0,0.06)] transition-colors duration-500">
+      <nav className="sticky top-0 w-full z-50 bg-neu-bg dark:bg-neu-darkBg border-none shadow-neu-flat dark:shadow-neu-dark-flat transition-colors duration-500">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
 

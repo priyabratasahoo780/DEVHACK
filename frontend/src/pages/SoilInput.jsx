@@ -189,24 +189,24 @@ export default function SoilInput() {
           <div className="flex items-center gap-2 mb-6">
             <button
               onClick={() => !isProcessing && setActiveTab('manual')}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${activeTab === 'manual' ? 'bg-primary-900 text-white shadow-md border-primary-900' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              className={`px-6 py-3 rounded-[2rem] text-sm font-black transition-all flex items-center gap-2 ${activeTab === 'manual' ? 'bg-green-500 text-white shadow-clay-btn border-none' : 'bg-white text-gray-500 shadow-clay-card hover:-translate-y-0.5'
                 }`}
             >
               <PenTool className="w-4 h-4" /> Manual Entry
             </button>
             <button
               onClick={() => !isProcessing && setActiveTab('upload')}
-              className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${activeTab === 'upload' ? 'bg-primary-900 text-white shadow-md border-primary-900' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              className={`px-6 py-3 rounded-[2rem] text-sm font-black transition-all flex items-center gap-2 ${activeTab === 'upload' ? 'bg-green-500 text-white shadow-clay-btn border-none' : 'bg-white text-gray-500 shadow-clay-card hover:-translate-y-0.5'
                 }`}
             >
               <UploadCloud className="w-4 h-4" /> Upload Report
             </button>
             <div className="ml-auto">
-              <VoiceInput onTranscript={(text) => console.log('Voice:', text)} className="w-[140px] px-4 rounded-xl font-bold flex gap-2 !w-auto" placeholder="Speak to fill data" />
+              <VoiceInput onTranscript={(text) => console.log('Voice:', text)} className="w-[140px] px-4 py-3 rounded-[2rem] font-bold flex gap-2 !w-auto bg-white shadow-clay-card text-gray-600 hover:-translate-y-0.5 transition-all" placeholder="Speak to fill data" />
             </div>
           </div>
 
-          <div className="card">
+          <div className="bg-white rounded-[2rem] shadow-clay-card p-8">
             {activeTab === 'manual' ? (
               <SoilForm onSubmit={handleSubmit} loading={isProcessing} />
             ) : (
@@ -289,11 +289,11 @@ export default function SoilInput() {
             const c = colorMap[nutrient.color];
 
             return (
-              <div key={nutrient.key} className={`rounded-2xl border overflow-hidden transition-all duration-300 ${isExpanded ? `${c.border} shadow-lg ring-2 ${c.ring}` : 'border-gray-100 shadow-sm hover:shadow-md'}`}>
+              <div key={nutrient.key} className={`rounded-[2rem] overflow-hidden transition-all duration-300 shadow-clay-card bg-white ${isExpanded ? `ring-2 ${c.ring}` : 'hover:-translate-y-1'}`}>
                 {/* Clickable Header */}
                 <button
                   onClick={() => toggleNutrient(nutrient.key)}
-                  className={`w-full flex items-center gap-3 p-4 text-left transition-colors ${isExpanded ? c.bg : 'bg-white hover:bg-gray-50'}`}
+                  className={`w-full flex items-center gap-3 p-4 text-left transition-colors ${isExpanded ? c.bg : 'bg-transparent hover:bg-gray-50'}`}
                 >
                   <div className={`w-10 h-10 rounded-xl ${c.bg} flex items-center justify-center flex-shrink-0`}>
                     {nutrient.icon}
@@ -313,7 +313,7 @@ export default function SoilInput() {
                       <img src={nutrient.image} alt={nutrient.name} className="w-full h-full object-cover" />
                     </div>
 
-                    <div className="p-4 space-y-4 bg-white">
+                    <div className="p-4 space-y-4 bg-white/50 dark:bg-black/20">
                       {/* Benefits */}
                       <div>
                         <h5 className="text-xs font-bold text-green-700 uppercase tracking-wider mb-2 flex items-center gap-1">

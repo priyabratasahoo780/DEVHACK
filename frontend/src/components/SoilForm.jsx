@@ -41,7 +41,7 @@ export default function SoilForm({ onSubmit, loading }) {
               step="any"
               {...register(field.name)}
               placeholder={field.placeholder}
-              className={`input-field shadow-sm bg-white border-gray-200 ${errors[field.name] ? 'border-red-400 focus:border-red-500 focus:ring-red-100' : ''}`}
+              className={`input-field bg-[#f8f9fa] border-none shadow-clay-input focus:shadow-clay-card transition-shadow rounded-xl ${errors[field.name] ? 'ring-2 ring-red-400' : ''}`}
             />
             {errors[field.name] && (
               <p className="text-red-500 text-xs font-bold mt-1.5 flex items-center gap-1">
@@ -61,7 +61,7 @@ export default function SoilForm({ onSubmit, loading }) {
             type="text"
             {...register('location')}
             placeholder="e.g. Ahmedabad, Gujarat"
-            className="input-field shadow-sm bg-white"
+            className="input-field bg-[#f8f9fa] border-none shadow-clay-input focus:shadow-clay-card transition-shadow rounded-xl"
           />
         </div>
         <div>
@@ -72,12 +72,12 @@ export default function SoilForm({ onSubmit, loading }) {
             type="text"
             {...register('crop')}
             placeholder="e.g. Wheat, Rice"
-            className="input-field shadow-sm bg-white"
+            className="input-field bg-[#f8f9fa] border-none shadow-clay-input focus:shadow-clay-card transition-shadow rounded-xl"
           />
         </div>
       </div>
 
-      <button type="submit" disabled={loading} className="w-full bg-primary-900 text-white rounded-xl py-4 px-6 font-bold text-lg flex items-center justify-center gap-3 hover:bg-primary-800 transition-colors shadow-lg shadow-primary-900/20 active:translate-y-0.5 mt-2">
+      <button type="submit" disabled={loading} className="w-full bg-green-500 text-white rounded-[2rem] py-4 px-6 font-black text-lg flex items-center justify-center gap-3 hover:shadow-clay-card shadow-clay-btn border-none transition-all active:scale-95 mt-4">
         {loading ? (
           <><Loader2 className="w-6 h-6 animate-spin" /> Analyzing Report...</>
         ) : (

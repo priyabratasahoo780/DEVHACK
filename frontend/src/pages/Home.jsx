@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import {
   Sprout, FlaskConical, Wheat, CloudSun, BarChart3, Landmark,
   CalendarDays, ArrowRight, Sparkles, Tractor, MapPin, Zap,
-  Star, TrendingUp, ShieldCheck, Leaf, HeartHandshake, Droplet, Trees, Store, LifeBuoy
+  Star, TrendingUp, ShieldCheck, Leaf, HeartHandshake, Droplet, Trees, Store, LifeBuoy, MessageSquarePlus, X
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import useLocation from '../hooks/useLocation';
@@ -107,9 +107,9 @@ const farmingStyles = [
 ];
 
 const seasons = [
-  { name: 'Rabi', months: 'Oct – Mar', icon: '❄️', color: 'from-blue-500 to-sky-600', crops: ['Wheat', 'Mustard', 'Gram', 'Potato', 'Onion'], tip: 'Sow early during the start of the season' },
-  { name: 'Kharif', months: 'Jun – Oct', icon: '☀️', color: 'from-amber-500 to-orange-500', crops: ['Rice', 'Maize', 'Cotton', 'Soybean', 'Groundnut'], tip: 'Start sowing with the monsoon rains' },
-  { name: 'Zaid', months: 'Mar – Jun', icon: '🌸', color: 'from-pink-500 to-rose-500', crops: ['Tomato', 'Cucumber', 'Watermelon', 'Muskmelon'], tip: 'Short cycle, high return' },
+  { name: 'Rabi', months: 'Oct – Mar', icon: '❄️', img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80', color: 'from-blue-500 to-sky-600', crops: ['Wheat', 'Mustard', 'Gram', 'Potato', 'Onion'], tip: 'Sow early during the start of the season' },
+  { name: 'Kharif', months: 'Jun – Oct', icon: '☀️', img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80', color: 'from-amber-500 to-orange-500', crops: ['Rice', 'Maize', 'Cotton', 'Soybean', 'Groundnut'], tip: 'Start sowing with the monsoon rains' },
+  { name: 'Zaid', months: 'Mar – Jun', icon: '🌸', img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=600&q=80', color: 'from-pink-500 to-rose-500', crops: ['Tomato', 'Cucumber', 'Watermelon', 'Muskmelon'], tip: 'Short cycle, high return' },
 ];
 
 const smartTips = [
@@ -149,6 +149,21 @@ export default function Home() {
   const [activeTip, setActiveTip] = useState(0);
   const [activeTab, setActiveTab] = useState('All');
   const [showAll, setShowAll] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalName, setModalName] = useState('');
+  const [modalStory, setModalStory] = useState('');
+
+  const handleStorySubmit = (e) => {
+    e.preventDefault();
+    if (!modalName || !modalStory) {
+      toast.error("Kripya apna naam aur kahani darj karein!", { icon: '⚠️' });
+      return;
+    }
+    toast.success("Aapki kahani safaltapurvak bheji gayi! 🙏", { style: { background: '#22c55e', color: '#fff' } });
+    setIsModalOpen(false);
+    setModalName('');
+    setModalStory('');
+  };
 
   useEffect(() => {
     const t = setInterval(() => setActiveTip(p => (p + 1) % rotatingTips.length), 3500);
@@ -191,7 +206,7 @@ export default function Home() {
   const visibleCrops = showAll ? filteredCrops : filteredCrops.slice(0, 6);
 
   return (
-    <div className="overflow-hidden bg-[#f4f7f4] dark:bg-gray-950 transition-colors duration-500">
+    <div className="overflow-hidden bg-neu-bg dark:bg-neu-darkBg transition-colors duration-500">
       <Helmet>
         <title>AgriSaar — AI-Powered Smart Farming Platform for Indian Kisaan</title>
         <meta name="description" content="AgriSaar is India's #1 AI farming platform — get smart crop recommendations, soil analysis, weather advisory, market prices, government schemes, fertilizer plans, and more. Boost your farm income with AI." />
@@ -245,11 +260,11 @@ export default function Home() {
       </HeroCarousel>
 
       {/* Stats Float */}
-      <section className="py-4 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-4 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 -mt-20 relative z-20">
             {stats.map((s, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900 backdrop-blur-xl border border-green-100 dark:border-gray-800 shadow-[0_8px_30px_rgb(0,0,0,0.08)] rounded-2xl p-6 text-center hover:-translate-y-2 transition-transform duration-300 group">
+              <div key={i} className="bg-neu-bg dark:bg-neu-darkBg border border-white/60 dark:border-gray-700 shadow-clay dark:shadow-clay-dark rounded-[2rem] p-6 border border-white/60 dark:border-gray-700 shadow-clay dark:shadow-clay-dark text-center hover:-translate-y-2 transition-transform duration-300 group">
                 <div className="flex justify-center mb-2 text-green-600 dark:text-green-400 group-hover:scale-125 transition-transform">{s.icon}</div>
                 <div className="text-4xl font-black bg-gradient-to-r from-green-800 to-emerald-600 dark:from-green-400 dark:to-emerald-300 bg-clip-text text-transparent">{s.value}</div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 font-bold uppercase tracking-widest">{s.label}</div>
@@ -260,7 +275,7 @@ export default function Home() {
       </section>
 
       {/* Quick Actions */}
-      <section className="py-10 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-10 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-center text-xl font-extrabold text-gray-700 dark:text-gray-200 mb-6">⚡ Quick Actions — Seedha Shuru Karo</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -273,8 +288,8 @@ export default function Home() {
               { icon: '🤝', label: 'Direct Sell', sub: 'B2B markets', path: '/b2b', color: 'bg-[#eff6ff]', border: 'border-blue-200', text: 'text-blue-900' },
               { icon: '💰', label: 'Price List', sub: 'Market Rates', path: '/market', color: 'bg-[#faf5ff]', border: 'border-purple-200', text: 'text-purple-900' },
             ].map((a, i) => (
-              <Link key={i} to={a.path} className="group flex flex-col items-center text-center gap-3 bg-white dark:bg-gray-900 rounded-3xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${a.color} flex items-center justify-center text-3xl shadow-lg group-hover:scale-110 transition-transform`}>
+              <Link key={i} to={a.path} className="group flex flex-col items-center text-center gap-3 bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] p-6 border border-white/60 dark:border-gray-700 shadow-clay dark:shadow-clay-dark active:shadow-neu-pressed dark:active:shadow-neu-dark-pressed transition-all hover:-translate-y-1">
+                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${a.color} flex items-center justify-center text-3xl shadow-clay border border-white/50 group-hover:scale-110 transition-transform`}>
                   {a.icon}
                 </div>
                 <div>
@@ -289,13 +304,13 @@ export default function Home() {
       </section>
 
       {/* Crop Showcase with Tabs */}
-      <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="inline-block bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">AI Recommended</span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">🌾 Is Season Ki Best Fasalein</h2>
             <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto font-medium mb-8">Real-time mandi data aur soil analysis ke based par top profitable crops</p>
-            <div className="inline-flex bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-1 gap-1 shadow-sm">
+            <div className="inline-flex bg-neu-bg dark:bg-neu-darkBg border-none rounded-2xl p-1 gap-1 shadow-neu-pressed dark:shadow-neu-dark-pressed">
 
               {cropTabs.map(tab => (
                 <button key={tab} onClick={() => { setActiveTab(tab); setShowAll(false); }}
@@ -307,7 +322,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleCrops.map((crop, i) => (
-              <Link to="/crops" key={i} className="group bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-2xl hover:border-green-200 transition-all duration-300 hover:-translate-y-2 flex flex-col">
+              <Link to="/crops" key={i} className="group bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] overflow-hidden shadow-clay dark:shadow-clay-dark border border-white/60 dark:border-gray-700 transition-all duration-300 hover:-translate-y-2 flex flex-col">
                 <div className="relative h-64 overflow-hidden">
                   <img src={crop.img} alt={crop.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -355,7 +370,7 @@ export default function Home() {
       </section>
 
       {/* Mandi Rates Table */}
-      <section className="py-16 bg-white dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="inline-block bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Live Data</span>
@@ -363,12 +378,12 @@ export default function Home() {
             <p className="text-gray-500 dark:text-gray-400 font-medium">Real-time market prices — AI se analyzed</p>
 
           </div>
-          <div className="bg-white dark:bg-gray-900 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-lg overflow-hidden">
+          <div className="bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] border border-white/60 dark:border-gray-700 shadow-clay dark:shadow-clay-dark overflow-hidden">
             <div className="grid grid-cols-3 bg-gradient-to-r from-green-800 to-emerald-700 px-6 py-4 text-white text-sm font-black uppercase tracking-widest">
               <span>Crop</span><span className="text-center">Rate (per quintal)</span><span className="text-right">Change</span>
             </div>
             {mandiRates.map((r, i) => (
-              <div key={i} className={`grid grid-cols-3 px-6 py-4 items-center border-b border-gray-50 dark:border-gray-800 hover:bg-green-50/50 dark:hover:bg-gray-800 transition-colors ${i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50/50 dark:bg-gray-800/50'}`}>
+              <div key={i} className={`grid grid-cols-3 px-6 py-4 items-center border-none transition-colors ${i % 2 === 0 ? 'bg-neu-bg dark:bg-neu-darkBg' : 'bg-neu-bg/50 dark:bg-neu-darkBg/50'} hover:shadow-neu-pressed dark:hover:shadow-neu-dark-pressed`}>
                 <span className="font-bold text-gray-900 dark:text-white">{r.crop}</span>
                 <span className="text-center font-black text-gray-900 dark:text-white text-lg">{r.rate}</span>
                 <span className={`text-right font-black text-sm ${r.up ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>{r.up ? '▲' : '▼'} {r.change}</span>
@@ -384,7 +399,7 @@ export default function Home() {
       </section>
 
       {/* Farming Styles */}
-      <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Farming Types</span>
@@ -394,7 +409,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {farmingStyles.map((fs, i) => (
-              <Link to={fs.link} key={i} className="group relative rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 h-72 flex flex-col justify-end">
+              <Link to={fs.link} key={i} className="group relative rounded-[2rem] overflow-hidden shadow-clay dark:shadow-clay-dark hover:shadow-2xl transition-all duration-400 hover:-translate-y-2 h-72 flex flex-col justify-end">
                 <img src={fs.img} alt={fs.title} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                 <div className="relative z-10 p-5">
@@ -409,7 +424,7 @@ export default function Home() {
       </section>
 
       {/* Seasonal Calendar */}
-      <section className="py-16 bg-white dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Seasonal Guide</span>
@@ -419,12 +434,15 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {seasons.map((s, i) => (
-              <div key={i} className="bg-white dark:bg-gray-900 rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1 group">
-                <div className={`bg-gradient-to-r ${s.color} p-6 text-white relative overflow-hidden`}>
-                  <div className="text-4xl mb-2">{s.icon}</div>
-                  <h3 className="text-2xl font-black">{s.name}</h3>
-                  <p className="text-white/80 text-sm font-semibold mt-1">{s.months}</p>
-                  <div className="absolute -right-4 -bottom-4 text-[80px] opacity-10">{s.icon}</div>
+              <div key={i} className="bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] overflow-hidden shadow-clay dark:shadow-clay-dark border border-white/60 dark:border-gray-700 transition-all hover:-translate-y-1 group">
+                <div className="relative h-48 overflow-hidden rounded-t-[2rem]">
+                  <img src={s.img} alt={s.name} className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${s.color} opacity-80 mix-blend-multiply`} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6 flex flex-col justify-end text-white">
+                    <div className="text-4xl mb-1">{s.icon}</div>
+                    <h3 className="text-3xl font-black drop-shadow-md">{s.name}</h3>
+                    <p className="text-white/90 text-sm font-semibold mt-1 drop-shadow-md">{s.months}</p>
+                  </div>
                 </div>
                 <div className="p-6">
                   <p className="text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest mb-3">Top Crops</p>
@@ -448,7 +466,7 @@ export default function Home() {
       </section>
 
       {/* Smart Tips */}
-      <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">Pro Tips</span>
@@ -458,7 +476,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {smartTips.map((tip, i) => (
-              <div key={i} className={`bg-gradient-to-br ${tip.color} border ${tip.border} dark:border-gray-800 rounded-3xl p-6 hover:shadow-lg transition-all hover:-translate-y-1 group`}>
+              <div key={i} className={`bg-gradient-to-br ${tip.color} dark:bg-neu-darkBg rounded-[2rem] p-6 shadow-clay dark:shadow-clay-dark border ${tip.border} border-opacity-70 dark:border-gray-800 hover:-translate-y-1 group transition-all`}>
                 <div className="text-4xl mb-4">{tip.icon}</div>
                 <h3 className="text-lg font-extrabold text-gray-900 mb-2 group-hover:text-green-800 transition-colors">{tip.title}</h3>
                 <p className="text-sm text-gray-600 font-medium leading-relaxed">{tip.desc}</p>
@@ -469,7 +487,7 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-16 bg-white dark:bg-gray-950">
+      <section className="py-16 bg-neu-bg dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-block bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest mb-4">All AI Tools</span>
@@ -481,8 +499,8 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((f, i) => (
-              <Link key={i} to={f.path} className={`relative bg-gradient-to-br ${f.bg} dark:bg-gray-900 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:border-green-300 hover:shadow-xl transition-all duration-300 group flex flex-col hover:-translate-y-1 overflow-hidden`}>
-                <div className={`w-14 h-14 mb-5 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform duration-300`}>
+              <Link key={i} to={f.path} className={`relative bg-gradient-to-br ${f.bg} dark:bg-neu-darkBg rounded-[2rem] p-6 shadow-clay dark:shadow-clay-dark border border-white/50 dark:border-gray-800 hover:border-green-300 hover:shadow-2xl transition-all duration-300 group flex flex-col hover:-translate-y-1 overflow-hidden`}>
+                <div className={`w-14 h-14 mb-5 rounded-2xl bg-gradient-to-br ${f.color} flex items-center justify-center text-white shadow-clay border border-white/30 group-hover:scale-110 transition-transform duration-300`}>
                   {f.icon}
                 </div>
                 <h3 className="text-lg font-extrabold text-gray-900 dark:text-white mb-2 group-hover:text-green-800 transition-colors">{f.title}</h3>
@@ -498,12 +516,11 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="py-16 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">⚡ Kaise Kaam Karta Hai?</h2>
             <p className="text-gray-500 dark:text-gray-400 font-medium">3 simple steps mein poora farming guide</p>
-
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -511,7 +528,7 @@ export default function Home() {
               { step: '02', icon: '🤖', title: 'AI Analyzes Data', desc: 'Gemini AI analyzes your soil, local weather, and market trends' },
               { step: '03', icon: '📋', title: 'Get Plan & Report', desc: 'Crops, fertilizers, weather, and market data all in one report' },
             ].map((item, i) => (
-              <div key={i} className="relative text-center p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 hover:border-green-200 hover:shadow-xl transition-all group">
+              <div key={i} className="relative text-center p-8 rounded-[2rem] bg-neu-bg dark:bg-neu-darkBg border border-white/60 dark:border-gray-700 shadow-clay dark:shadow-clay-dark hover:shadow-neu-pressed dark:hover:shadow-neu-dark-pressed transition-all group">
                 <div className="text-6xl mb-5">{item.icon}</div>
                 <div className="absolute top-4 right-4 text-5xl font-black text-green-100 dark:text-green-900 group-hover:text-green-200 transition-colors select-none">{item.step}</div>
                 <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-3">{item.title}</h3>
@@ -523,7 +540,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-white dark:bg-gray-950">
+      <section className="py-16 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-3">❤️ Kisan Kya Kehte Hain</h2>
@@ -532,7 +549,7 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <div key={i} className="bg-[#f4f7f4] dark:bg-gray-900 rounded-3xl p-6 border border-gray-100 dark:border-gray-800 hover:shadow-xl hover:border-green-200 transition-all hover:-translate-y-1">
+              <div key={i} className="bg-neu-bg dark:bg-neu-darkBg rounded-[2rem] p-6 shadow-clay dark:shadow-clay-dark border border-white/60 dark:border-gray-700 transition-all hover:-translate-y-1">
                 <div className="flex gap-0.5 mb-4">
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
@@ -549,13 +566,22 @@ export default function Home() {
               </div>
             ))}
           </div>
+
+          <div className="mt-12 text-center">
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              className="inline-flex items-center gap-2 bg-neu-bg dark:bg-neu-darkBg text-gray-800 dark:text-gray-200 px-8 py-4 rounded-2xl font-bold shadow-clay dark:shadow-clay-dark border border-white/50 dark:border-gray-700 hover:shadow-neu-pressed dark:hover:shadow-neu-dark-pressed hover:-translate-y-0.5 active:scale-95 transition-all">
+              <MessageSquarePlus className="w-5 h-5 text-green-600 dark:text-green-400" />
+              Apni Kahani Likhein
+            </button>
+          </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-[#f4f7f4] dark:bg-gray-950">
+      <section className="py-24 bg-neu-bg dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-green-900 via-emerald-800 to-[#0a2e0d] rounded-[3rem] p-10 md:p-20 text-center shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-br from-green-900 via-emerald-800 to-[#0a2e0d] rounded-[3rem] p-10 md:p-20 text-center shadow-clay dark:shadow-clay-dark border border-white/20 relative overflow-hidden">
             <div className="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
               <Tractor className="w-[500px] h-[500px] text-white" />
             </div>
@@ -566,7 +592,7 @@ export default function Home() {
               <p className="text-green-100/90 mb-10 text-lg font-medium">
                 Just enter your basic soil data and our AI will generate a complete farming plan. Completely free.
               </p>
-              <Link to="/soil-input" className="inline-flex items-center gap-3 bg-white text-green-950 px-10 py-5 rounded-2xl font-black text-lg hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:bg-gray-50 transition-all active:scale-95 hover:-translate-y-1">
+              <Link to="/soil-input" className="inline-flex items-center gap-3 bg-white text-green-950 px-10 py-5 rounded-[2rem] font-black text-lg shadow-[inset_4px_4px_8px_rgba(255,255,255,1),inset_-4px_-4px_8px_rgba(0,0,0,0.1),4px_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[inset_2px_2px_4px_rgba(255,255,255,1),inset_-2px_-2px_4px_rgba(0,0,0,0.1),2px_2px_6px_rgba(0,0,0,0.4)] border border-white/60 dark:border-gray-700 transition-all active:scale-95 hover:-translate-y-1">
                 <FlaskConical className="w-6 h-6" /> Start Soil Analysis
               </Link>
             </div>
@@ -598,6 +624,54 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Testimonial Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+          <div className="bg-neu-bg dark:bg-neu-darkBg rounded-[2.5rem] p-8 max-w-md w-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] relative">
+            <button 
+              onClick={() => setIsModalOpen(false)} 
+              className="absolute top-6 right-6 p-2 rounded-full bg-white dark:bg-gray-800 shadow-clay-card hover:shadow-neu-pressed transition-all text-gray-500"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+              <HeartHandshake className="w-6 h-6 text-rose-500" /> Apni Kahani
+            </h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 font-medium mb-6">AgriSaar se aapko kya fayda hua? Dusre kisano ke sath share karein.</p>
+            
+            <form onSubmit={handleStorySubmit} className="space-y-5">
+              <div>
+                <label className="label-text">Aapka Naam</label>
+                <input 
+                  type="text" 
+                  value={modalName}
+                  onChange={(e) => setModalName(e.target.value)}
+                  placeholder="e.g. Ramesh Patel" 
+                  className="input-field shadow-clay-input bg-[#f8f9fa] border-none"
+                />
+              </div>
+              <div>
+                <label className="label-text">Aapki Kahani</label>
+                <textarea 
+                  rows="4"
+                  value={modalStory}
+                  onChange={(e) => setModalStory(e.target.value)}
+                  placeholder="Mera anubhav AgriSaar ke sath..." 
+                  className="input-field shadow-clay-input bg-[#f8f9fa] border-none resize-none"
+                ></textarea>
+              </div>
+              <button 
+                type="submit" 
+                className="w-full bg-green-500 text-white rounded-[2rem] py-4 font-black text-lg flex items-center justify-center gap-2 hover:shadow-clay-card shadow-clay-btn border border-white/60 dark:border-gray-700 transition-all active:scale-95 mt-2"
+              >
+                Kahani Jama Karein <ArrowRight className="w-5 h-5" />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
