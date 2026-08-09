@@ -103,7 +103,7 @@ const farmingStyles = [
   { title: 'Organic Farming', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80', desc: 'Farming in harmony with nature, no chemicals', tag: '🌿 Natural', link: '/soil-input' },
   { title: 'Precision Agriculture', img: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80', desc: 'Smart land management using drones and AI', tag: '🤖 Tech-Driven', link: '/crops' },
   { title: 'Water-Efficient Farming', img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=80', desc: 'Save 40% water using drip irrigation', tag: '💧 Eco-Friendly', link: '/fertilizer' },
-  { title: 'Greenhouse Farming', img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=600&q=80', desc: 'High-value crops in a controlled environment', tag: '🏡 Protected', link: '/crops' },
+  { title: 'Greenhouse Farming', img: 'https://images.unsplash.com/photo-1590682680695-43b964a3ae17?w=600&q=80', desc: 'High-value crops in a controlled environment', tag: '🏡 Protected', link: '/crops' },
 ];
 
 const seasons = [
